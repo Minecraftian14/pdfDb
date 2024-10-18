@@ -1,0 +1,41 @@
+plugins {
+    id 'java'
+    id 'org.springframework.boot' version '3.3.4' apply false
+    id 'io.spring.dependency-management' version '1.1.6'
+}
+
+group = 'in.mcxiv14'
+version = '0.0.1-SNAPSHOT'
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(17)
+    }
+}
+
+dependencyManagement {
+    imports {
+        mavenBom org.springframework.boot.gradle.plugin.SpringBootPlugin.BOM_COORDINATES
+    }
+}
+
+dependencies {
+    implementation project(':odb')
+
+    implementation 'org.apache.pdfbox:pdfbox:3.0.3'
+    implementation files('libs/aspose-pdf-24.9.jar')
+    implementation 'com.itextpdf:itextpdf:5.5.13.4'
+    implementation 'org.bouncycastle:bcprov-jdk15to18:1.78.1'
+    implementation files('libs/pdfxstream-3.9.7-beta1.jar')
+
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.compilerArgs.add("-parameters")
+}

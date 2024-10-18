@@ -1,0 +1,12 @@
+rootProject.name = 'pdfDb'
+
+include 'odb'
+include 'impl'
+include 'debug'
+
+include 'json'
+include 'pdf'
+
+include 'regexGen'
+include 'regexVal'
+
