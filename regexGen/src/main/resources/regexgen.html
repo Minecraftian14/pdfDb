@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Generate RegEx</title>
+</head>
+<body>
+<form id="form" action="/regexgen" method="post" enctype="multipart/form-data">
+    <input type="file" name="file" id="file"/><br/>
+    <label>Key Name</label><br/>
+    <input type="text" name="key" id="key"/><br/>
+    <label>Value</label><br/>
+    <textarea name="value" id="value"></textarea>
+    <label hidden="hidden">Type Hint</label><br/>
+    <input hidden="hidden" type="text" name="typeHint" id="typeHint"/><br/>
+    <label hidden="hidden">Length Hint</label><br/>
+    <input hidden="hidden" type="text" name="lengthHint" id="lengthHint"/><br/>
+    <input type="submit" value="Submit"/><br/>
+    <pre id="results"></pre>
+</form>
+<script>
+    let results = document.getElementById("results")
+
+    function processForm(e) {
+        if (e.preventDefault) e.preventDefault();
+
+        let formData = new FormData();
+        formData.append('key', document.getElementById('key').value);
+        formData.append('value', document.getElementById('value').value);
+        formData.append('typeHint', document.getElementById('typeHint').value);
+        formData.append('lengthHint', document.getElementById('lengthHint').value);
+        formData.append('file', document.getElementById('file').files[0]);
+
+        fetch('/regexgen', {
+            method: 'POST',
+            body: formData
+        })
+            .then(response => response.text())  // Assuming the response is plain text
+            .then(data => {
+                results.innerHTML += "<br\>" + data.replaceAll(/(\\[nr])+/g, "<br\>")
+            })
+            .catch(error => {
+                results.innerHTML += data
+            });
+    }
+
+    let form = document.getElementById('form');
+    if (form.attachEvent) {
+        form.attachEvent("submit", processForm);
+    } else {
+        form.addEventListener("submit", processForm);
+    }
+</script>
+</body>
+</html>

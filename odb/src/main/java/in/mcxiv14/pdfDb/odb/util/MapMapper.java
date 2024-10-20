@@ -12,7 +12,7 @@ public interface MapMapper<T, R> extends Function<T, R> {
 
     R apply2(T t) throws Exception;
 
-    static <T, R> Function<T, R> map(MapMapper<T, R> mapper) {
+    static <T, R> Function<T, R> unchecked(MapMapper<T, R> mapper) {
         return mapper;
     }
 }

@@ -1,4 +1,4 @@
-package in.mcxiv14.pdfDb.regexGen;
+package in.mcxiv14.pdfDb.regexGen.strategies;
 
 import in.mcxiv14.pdfDb.odb.objects.Fabric;
 import in.mcxiv14.pdfDb.odb.util.Patterns;

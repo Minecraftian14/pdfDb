@@ -5,7 +5,6 @@ import in.mcxiv14.pdfDb.odb.pdf.PDFDigester;
 import org.apache.pdfbox.Loader;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.text.PDFTextStripper;
-import org.springframework.stereotype.Component;
 
 import java.io.File;
 import java.io.IOException;
@@ -25,13 +24,13 @@ public class PDFDigesterPDFBoxImpl implements PDFDigester {
 
     @Override
     public Fabric digest(String pdfFile) {
-        return Fabric.fabricateC(() -> Loader.loadPDF(new File(pdfFile)))
+        return Fabric.fabricateAC(() -> Loader.loadPDF(new File(pdfFile)))
                 .apply(this::digest);
     }
 
     @Override
     public Fabric digest(byte[] pdfData) {
-        return Fabric.fabricateC(() -> Loader.loadPDF(pdfData))
+        return Fabric.fabricateAC(() -> Loader.loadPDF(pdfData))
                 .apply(this::digest);
     }
 

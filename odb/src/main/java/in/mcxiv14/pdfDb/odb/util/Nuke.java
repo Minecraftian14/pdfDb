@@ -1,9 +1,10 @@
 package in.mcxiv14.pdfDb.odb.util;
 
-import in.mcxiv.tryCatchSuite.DangerousRunnable;
 import in.mcxiv.tryCatchSuite.DangerousSupplier;
 import in.mcxiv.tryCatchSuite.Try;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.function.Supplier;
 
 public class Nuke<Type> implements Supplier<Type> {
@@ -25,11 +26,10 @@ public class Nuke<Type> implements Supplier<Type> {
         return new Nuke<>(constructor);
     }
 
-    public static Supplier<Object> nukeR(DangerousRunnable initializer) {
-        return new Nuke<>(() -> {
-            initializer.run();
-            return new Object();
-        });
-    }
+    private static final Map<Class<?>, Object> madScientistsLab = new HashMap<>();
 
+    @SuppressWarnings("unchecked")
+    public static <T> T remember(Class<?> clazz, Supplier<T> constructor) {
+        return (T) madScientistsLab.computeIfAbsent(clazz, __ -> constructor.get());
+    }
 }

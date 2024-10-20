@@ -3,6 +3,7 @@ package in.mcxiv14.pdfDb.odb.util;
 import org.springframework.util.StringUtils;
 
 import java.awt.*;
+import java.util.Objects;
 import java.util.regex.Pattern;
 
 public class CharGeometry {
@@ -31,4 +32,7 @@ public class CharGeometry {
         return pointA.distance(pointB);
     }
 
+    public static boolean equalsIgnoringLineSeparators(String a, String b) {
+        return Objects.equals(a.replaceAll("[\n\r]+", "\n"), b.replaceAll("[\n\r]+", "\n"));
+    }
 }

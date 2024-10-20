@@ -24,8 +24,8 @@ class PdfDbApplicationTests {
 
 	@Test
 	void testPDFDigester() {
-		var text = pdfDigester.digest("src\\test\\resources\\sample pdfs\\Format 2\\Sample1.pdf");
-		System.out.println("text");
+		var text = pdfDigester.digest("src\\test\\resources\\sample pdfs\\Format 1\\Sample1.pdf");
+		System.out.println(pdfDigester.getClass().getSimpleName());
 		System.out.println(text);
 	}
 

@@ -5,10 +5,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/odb/library")
-public class LibraryControllerIMPL {
+@RequestMapping
+public class ApplicationController {
+
     @GetMapping("/checkAlive")
     public String get() {
         return "Hello ODB Lib";
     }
+
+
+
 }

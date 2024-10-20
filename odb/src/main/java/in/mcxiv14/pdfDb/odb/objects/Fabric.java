@@ -4,6 +4,7 @@ import in.mcxiv.tryCatchSuite.DangerousFunction;
 import in.mcxiv.tryCatchSuite.DangerousSupplier;
 import lombok.Data;
 
+import java.io.Closeable;
 import java.util.function.Function;
 import java.util.regex.Pattern;
 
@@ -22,7 +23,7 @@ public class Fabric {
         return "<Fabric>%n%s%n</Fabric>".formatted(source);
     }
 
-    public static <T extends AutoCloseable> Function<DangerousFunction<T, Fabric>, Fabric> fabricateC(DangerousSupplier<T> supplier) {
+    public static <T extends AutoCloseable> Function<DangerousFunction<T, Fabric>, Fabric> fabricateAC(DangerousSupplier<T> supplier) {
         return action -> {
             try (T t = supplier.get()) {
                 return action.apply(t);
@@ -30,6 +31,10 @@ public class Fabric {
                 throw new RuntimeException(e);
             }
         };
+    }
+
+    public static <T extends Closeable> Function<DangerousFunction<T, Fabric>, Fabric> fabricateC(DangerousSupplier<T> supplier) {
+        return fabricateAC(supplier);
     }
 
     public static <T> Function<DangerousFunction<T, Fabric>, Fabric> fabricate(DangerousSupplier<T> supplier) {
