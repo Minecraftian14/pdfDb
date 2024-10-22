@@ -23,11 +23,15 @@ public interface Strategy {
 
         Strategy apply(Fabric space, String key, String value);
 
-        default Strategy deserialize(String strategy) {
+        static Strategy defaultDeserialize(String strategy) {
             var reader = MAPPER.reader();
             var tree = Try.get(() -> reader.readTree(strategy));
             var clazz = Try.get(() -> Class.forName(tree.get("strategyName").asText()));
             return Try.get(() -> reader.forType(clazz).readValue(tree.get("strategy")));
+        }
+
+        default Strategy deserialize(String strategy) {
+            return defaultDeserialize(strategy);
         }
 
     }
@@ -37,7 +41,7 @@ public interface Strategy {
         Strategy strategy;
 
         StrategyContainer(Strategy strategy) {
-            this.strategyName = strategy.getClass().getCanonicalName();
+            this.strategyName = strategy.getClass().getName();
             this.strategy = strategy;
         }
     }

@@ -11,10 +11,11 @@ import java.util.stream.Collectors;
 
 public class KNVNVStrategyProvider implements Strategy.StrategyProvider {
 
-    public record KNVNVStrategy(Pattern rgxKey, String rgxValue) implements Strategy {
+    public record KNVNVStrategy(String rgxKey, String rgxValue) implements Strategy {
+
         @Override
         public String process(Fabric space) {
-            var matcherKey = rgxKey.matcher(space.getSource());
+            var matcherKey = Pattern.compile(rgxKey, Pattern.MULTILINE).matcher(space.getSource());
             if (!matcherKey.find()) return null;
             var keyPosition = matcherKey.group("keyPosition").length(); // Will always be same as before
             var remainingLines = space.getSource().substring(matcherKey.end());
@@ -73,7 +74,7 @@ public class KNVNVStrategyProvider implements Strategy.StrategyProvider {
         var matchedValue = builder.toString();
         if (!CharGeometry.equalsIgnoringLineSeparators(value, matchedValue)) return null;
 
-        return new KNVNVStrategy(rgxKey, rgxValue);
+        return new KNVNVStrategy(rgxKey.pattern(), rgxValue);
     }
 
 }

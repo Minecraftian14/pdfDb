@@ -5,20 +5,9 @@ import in.mcxiv14.pdfDb.regexGen.Strategy;
 
 import java.util.regex.Pattern;
 
-public class SinglePatternStrategy implements Strategy {
-
-    private Pattern pattern;
-
-    public SinglePatternStrategy() {
-    }
-
-    public SinglePatternStrategy(Pattern pattern) {
-        this.pattern = pattern;
-    }
-
+public record SinglePatternStrategy(String pattern) implements Strategy {
     @Override
     public String process(Fabric space) {
-        return space.find(pattern);
+        return space.find(Pattern.compile(pattern, Pattern.MULTILINE));
     }
-
 }

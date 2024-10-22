@@ -12,7 +12,7 @@ class StrategyTest {
 
     @Test
     void serializationTest() {
-        var strategy = new SinglePatternStrategy(Pattern.compile("Hello"));
+        var strategy = new SinglePatternStrategy("Hello");
         var json = strategy.serialize();
         assertLinesMatch("""
                 {

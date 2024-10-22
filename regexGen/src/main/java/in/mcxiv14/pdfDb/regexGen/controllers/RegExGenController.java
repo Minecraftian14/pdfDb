@@ -34,15 +34,15 @@ public class RegExGenController {
             @RequestParam("key") String key,
             @RequestParam("value") String value) {
         var response = new GenerateResponse();
-//        var file = /*request.getFile()*/;
         var space = digester.digest(Try.get(file::getBytes));
         Strategy strategy;
-        if (/*request.getKey()*/key == null)
-            strategy = regressor.regressUsingValue(space, /*request.getValue()*/ value);
-        else strategy = regressor.regress(space, /*request.getKey()*/key, /*request.getValue()*/value);
+        if (key == null)
+            strategy = regressor.regressUsingValue(space, value);
+        else strategy = regressor.regress(space, key, value);
 //        if (strategy == null) strategy = regressor.regressUsingGenAI(space, request);
         if (strategy != null) {
             response.setStrategy(strategy.serialize());
+            System.out.println(response.getStrategy());
             response.success();
         } else response.fail();
         return response;

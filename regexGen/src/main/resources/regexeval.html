@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Generate RegEx</title>
+</head>
+<body>
+<form id="form" action="/regexeval" method="post" enctype="multipart/form-data">
+    <input type="file" name="file" id="file"/><br/>
+    <label>Strategy JSON</label><br/>
+    <textarea name="strategy" id="strategy" rows="10" cols="200"></textarea><br/>
+    <input type="submit" value="Submit"/><br/>
+    <pre id="results"></pre>
+</form>
+<script>
+    let results = document.getElementById("results")
+
+    function processForm(e) {
+        if (e.preventDefault) e.preventDefault();
+
+        let formData = new FormData();
+        formData.append('strategy', document.getElementById('strategy').value);
+        formData.append('file', document.getElementById('file').files[0]);
+
+        fetch('/regexeval', {
+            method: 'POST',
+            body: formData
+        })
+            .then(response => response.text())  // Assuming the response is plain text
+            .then(data => {
+                results.innerHTML += "<br\>" + data // .replaceAll(/(\\[nr])+/g, "<br\>")
+            })
+            .catch(error => {
+                results.innerHTML += "<br\>" + error
+            });
+
+        return false
+    }
+
+    let form = document.getElementById('form');
+    if (form.attachEvent) {
+        form.attachEvent("submit", processForm);
+    } else {
+        form.addEventListener("submit", processForm);
+    }
+</script>
+</body>
+</html>

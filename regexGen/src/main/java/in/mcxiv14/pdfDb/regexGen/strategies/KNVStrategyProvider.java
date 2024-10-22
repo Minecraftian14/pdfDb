@@ -9,18 +9,18 @@ import java.util.regex.Pattern;
 
 public class KNVStrategyProvider implements Strategy.StrategyProvider {
 
-    public record KNVStrategy(Pattern rgxKey, String rgxValue) implements Strategy {
+    public record KNVStrategy(String  rgxKey, String rgxValue) implements Strategy {
         @Override
-        public String process(Fabric space) {
-            var matcherKey = rgxKey.matcher(space.getSource());
-            if (!matcherKey.find()) return null;
-            var keyPosition = matcherKey.group("keyPosition").length();
-            var nextLine = matcherKey.group("nextLine");
-            var matcherValue = Pattern.compile(rgxValue.formatted(Math.max(0, keyPosition - 2), keyPosition + 2), Pattern.MULTILINE).matcher(nextLine);
-            if (!matcherValue.find()) return null;
-            return matcherValue.group("value");
+            public String process(Fabric space) {
+                var matcherKey = Pattern.compile(rgxKey, Pattern.MULTILINE).matcher(space.getSource());
+                if (!matcherKey.find()) return null;
+                var keyPosition = matcherKey.group("keyPosition").length();
+                var nextLine = matcherKey.group("nextLine");
+                var matcherValue = Pattern.compile(rgxValue.formatted(Math.max(0, keyPosition - 2), keyPosition + 2), Pattern.MULTILINE).matcher(nextLine);
+                if (!matcherValue.find()) return null;
+                return matcherValue.group("value");
+            }
         }
-    }
 
     public Strategy apply(Fabric space, String key, String value) {
         var rgxVerify = Pattern.compile(
@@ -49,7 +49,12 @@ public class KNVStrategyProvider implements Strategy.StrategyProvider {
         matchedValue = matcherValue.group("value");
         if (!Objects.equals(value, matchedValue)) return null;
 
-        return new KNVStrategy(rgxKey, rgxValue);
+        return new KNVStrategy(rgxKey.pattern(), rgxValue);
+    }
+
+    public static void main(String[] args) {
+        var s = new KNVStrategyProvider().apply(new Fabric("A\nB"), "A", "B");
+        System.out.println(s.serialize());
     }
 
 }
